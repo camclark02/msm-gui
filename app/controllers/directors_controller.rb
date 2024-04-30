@@ -36,4 +36,46 @@ class DirectorsController < ApplicationController
 
     render({ :template => "director_templates/eldest" })
   end
+
+  def create
+    #hash looks like : {"the_name"=>"Austin", "the_dob"=>"09/20/30", "the_bio"=>"hello", "the_image"=>""}
+    d = Director.new
+    d.name = params.fetch("the_name")
+    d.dob = params.fetch("the_dob")
+    d.bio = params.fetch("the_bio")
+    d.image = params.fetch("the_image")
+
+    d.save
+
+    redirect_to("/directors")
+  end
+
+  def destroy
+    the_id = params.fetch("an_id")
+
+    matching_records = Director.where({ :id => the_id })
+
+    the_director = matching_records.at(0)
+
+    the_director.destroy
+
+    redirect_to("/directors")
+  end
+
+  def edit
+    d_id = params.fetch("the_id")
+
+    matching_records = Director.where({ :id => d_id })
+
+    the_director = matching_records.at(0)
+
+    the_director.name = params.fetch("the_name")
+    the_director.dob = params.fetch("the_dob")
+    the_director.bio = params.fetch("the_bio")
+    the_director.image = params.fetch("the_image")
+
+    the_director.save
+
+    redirect_to("/directors/#{the_director.id}")
+  end
 end
